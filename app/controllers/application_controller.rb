@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
       @current_user = User.find_by(id: decoded[:user_id])
     end
 
-    render json: { error: "Unauthorized" }, status: :unauthorized unless @current_user
+    render json: { message: "Unauthorized" }, status: :unauthorized unless @current_user
   end
 
   attr_reader :current_user

@@ -15,7 +15,7 @@ module Api
           transaction: transaction_json(transaction)
         }, status: :created
       rescue ExchangeService::ExchangeError => e
-        render json: { error: e.message }, status: :unprocessable_entity
+        render json: { message: e.message }, status: :unprocessable_entity
       end
 
       private

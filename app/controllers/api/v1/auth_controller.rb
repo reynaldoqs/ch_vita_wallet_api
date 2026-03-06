@@ -10,7 +10,7 @@ module Api
           token = JwtService.encode(user_id: user.id)
           render json: { token: token, user: user_json(user) }, status: :created
         else
-          render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+          render json: { message: user.errors.full_messages.join(", ") }, status: :unprocessable_entity
         end
       end
 
@@ -21,7 +21,7 @@ module Api
           token = JwtService.encode(user_id: user.id)
           render json: { token: token, user: user_json(user) }
         else
-          render json: { error: "Invalid email or password" }, status: :unauthorized
+          render json: { message: "Invalid email or password" }, status: :unauthorized
         end
       end
 

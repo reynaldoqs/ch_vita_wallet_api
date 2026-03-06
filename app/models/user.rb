@@ -13,7 +13,9 @@ class User < ApplicationRecord
   def create_wallet_with_balances
     w = create_wallet!
     Balance::CURRENCIES.each do |currency|
-      w.balances.create!(currency: currency, amount: 0)
+      # Dev/test only: give new users 10_000 USD so they can try exchanges without funding
+      amount = currency == "USD" ? 10_000 : 0
+      w.balances.create!(currency: currency, amount: amount)
     end
   end
 end
