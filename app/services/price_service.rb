@@ -20,7 +20,6 @@ class PriceService
 
   def self.fetch_from_api
     response = Faraday.get(API_URL) do |req|
-      req.headers["Authorization"] = "Bearer #{api_token}" if api_token.present?
       req.options.timeout = 10
       req.options.open_timeout = 5
     end
@@ -33,7 +32,10 @@ class PriceService
   def self.parse_response(data)
     raw = data["prices"] || data["data"] || data
     raw = raw.slice(*ASSET_KEYS)
-    raw.transform_values { |asset| normalize_asset_rates(asset) }
+    prices = raw.transform_values { |asset| normalize_asset_rates(asset) }
+    result = { "prices" => prices }
+    result["valid_until"] = data["valid_until"] if data["valid_until"].present?
+    result
   end
 
   def self.normalize_asset_rates(asset)
@@ -55,9 +57,5 @@ class PriceService
     n.positive? && n < 1 ? (1 / n) : n
   end
 
-  def self.api_token
-    Rails.application.credentials.dig(:vitawallet, :api_token) || ENV.fetch("VITAWALLET_API_TOKEN", "")
-  end
-
-  private_class_method :fetch_from_api, :parse_response, :normalize_asset_rates, :invert_rate, :api_token
+  private_class_method :fetch_from_api, :parse_response, :normalize_asset_rates, :invert_rate
 end

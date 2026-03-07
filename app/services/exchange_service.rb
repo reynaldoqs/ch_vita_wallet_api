@@ -53,7 +53,8 @@ class ExchangeService
   end
 
   def fetch_rate
-    prices = PriceService.fetch_prices
+    result = PriceService.fetch_prices
+    prices = result["prices"] || result
     lookup_rate(prices)
   rescue PriceService::ApiError => e
     raise ExchangeError, "Could not fetch exchange rate: #{e.message}"
@@ -63,7 +64,7 @@ class ExchangeService
     crypto = fiat_to_crypto? ? @to_currency : @from_currency
     fiat = fiat_to_crypto? ? @from_currency : @to_currency
 
-    price_data = prices[crypto] || prices[crypto.downcase]
+    price_data = prices[crypto] || prices[crypto.to_s.downcase]
     raise ExchangeError, "Price not available for #{crypto}" unless price_data
 
     price = if price_data.is_a?(Hash)

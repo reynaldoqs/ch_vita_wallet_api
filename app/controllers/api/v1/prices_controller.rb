@@ -3,7 +3,7 @@ module Api
     class PricesController < ApplicationController
       def index
         prices = PriceService.fetch_prices
-        render json: { prices: prices }
+        render json: prices
       rescue PriceService::ApiError => e
         render json: { message: e.message }, status: :service_unavailable
       end
