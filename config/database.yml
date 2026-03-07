@@ -86,6 +86,4 @@ test:
 #
 production:
   <<: *default
-  database: vitawallet_api_production
-  username: vitawallet_api
-  password: <%= ENV["VITAWALLET_API_DATABASE_PASSWORD"] %>
+  url: <%= ENV.fetch("DATABASE_URL") %>

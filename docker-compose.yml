@@ -9,17 +9,5 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  web:
-    build: .
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/vitawallet_api_development
-      RAILS_ENV: development
-      SECRET_KEY_BASE: dev_secret_key_base_for_local_development_only
-    command: bash -c "rails db:prepare && rails server -b 0.0.0.0 -p 3000"
-
 volumes:
   pgdata:

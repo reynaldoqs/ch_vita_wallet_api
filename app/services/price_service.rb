@@ -1,5 +1,5 @@
 class PriceService
-  API_URL = "https://api.stage.vitawallet.io/api/prices_quote".freeze
+  API_URL = ENV.fetch("PRICES_API_URL").freeze
   CACHE_KEY = "crypto_prices".freeze
   CACHE_TTL = 30.seconds
 
