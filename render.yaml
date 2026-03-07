@@ -1,0 +1,26 @@
+databases:
+  - name: vitawallet_db
+    plan: free
+    databaseName: vitawallet_api_production
+
+services:
+  - type: web
+    runtime: ruby
+    name: vitawallet-api
+    plan: free
+    region: oregon
+    buildCommand: ./bin/render-build.sh
+    preDeployCommand: bundle exec rails db:migrate
+    startCommand: bundle exec rails server
+    healthCheckPath: /up
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vitawallet_db
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: PRICES_API_URL
+        sync: false
