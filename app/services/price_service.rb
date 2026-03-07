@@ -32,7 +32,7 @@ class PriceService
   def self.parse_response(data)
     raw = data["prices"] || data["data"] || data
     raw = raw.slice(*ASSET_KEYS)
-    prices = raw.transform_values { |asset| normalize_asset_rates(asset) }
+    prices = raw.transform_keys(&:upcase).transform_values { |asset| normalize_asset_rates(asset) }
     result = { "prices" => prices }
     result["valid_until"] = data["valid_until"] if data["valid_until"].present?
     result
