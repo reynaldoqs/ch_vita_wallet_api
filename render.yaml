@@ -10,7 +10,6 @@ services:
     plan: free
     region: oregon
     buildCommand: ./bin/render-build.sh
-    preDeployCommand: bundle exec rails db:migrate
     startCommand: bundle exec rails server
     healthCheckPath: /up
     envVars:
